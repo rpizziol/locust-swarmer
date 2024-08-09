@@ -213,19 +213,20 @@ if args.method == "VPA":
     #Start enforcer (in parallel)
     print("[Starting enforcing VPA recommendations.]")
 
-if args.method != "HPA":
-    try:
-        test_name = "test1"
-        delete_folder(f"~/muOptK8s/ctrl/logs/{test_name}")
-        command = (f"gcloud container clusters get-credentials cluster-2 --region=northamerica-northeast1-a; "
-                   f"python3 ~/muOptK8s/ctrl/autoscaler.py -m {args.method} -wa {args.webapp} -n {test_name} -t {args.wctrl} -ut {args.utarget}")
-        enforcer_process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL)
-        print("Spawned autoscaler process")
-    except Exception as e:
-        enforcer_process.kill()
-        raise
+# if args.method != "HPA":
+#     try:
+#         test_name = "test1"
+#         delete_folder(f"~/muOptK8s/ctrl/logs/{test_name}")
+#         command = (f"gcloud container clusters get-credentials cluster-2 --region=northamerica-northeast1-a; "
+#                    f"python3 ~/muOptK8s/ctrl/autoscaler.py -m {args.method} -wa {args.webapp} -n {test_name} -t {args.wctrl} -ut {args.utarget}")
+#         enforcer_process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL)
+#         print("Spawned autoscaler process")
+#     except Exception as e:
+#         enforcer_process.kill()
+#         raise
 
-# Run the real experiment
+# # Run the real experiment
+# time.sleep(60)
 os.system(locust_command)
 
 # Ending time
