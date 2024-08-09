@@ -177,11 +177,11 @@ host_url = "http://{args.host}:8080"
 
 if args.wlshape == "traceShape":
     exp_name = args.name  # e.g. sin200-1h-vpa
-    exp_folder = f"./results/acmeair/{current_date}/{exp_name}"
+    exp_folder = f"~/results/acmeair/{current_date}/{exp_name}"
     locust_command = f"locust -f locustfile.py,traceShape.py --headless --csv=\"{exp_folder}/{exp_name}-learning\" --host=\"{host_url}\""
 else:
     exp_name = f"u{args.users}-{args.duration}m-{args.method}"
-    exp_folder = f"./results/acmeair/{current_date}/{exp_name}"
+    exp_folder = f"~/results/acmeair/{current_date}/{exp_name}"
     locust_command = f"locust -f locustfile.py -r {args.users} -u {args.users} --headless --csv=\"{exp_folder}/{exp_name}\" --host=\"{host_url}\" --run-time {args.duration}m"
 
 # Get current time, filenames and folders
@@ -189,7 +189,7 @@ else:
 time_file = f"{exp_folder}/{exp_name}-time.txt"
 create_or_clean_folder(exp_folder)  # Create the experiment folder (if it doesn't exist)
 
-# reset_conditions()
+reset_conditions()
 time.sleep(60)  # Wait a minute to settle
 
 print(f"[Launching experiment {exp_name} with Locust. Results will be stored in the {exp_folder} folder.]")
@@ -214,7 +214,7 @@ if args.method == "VPA":
     print("[Starting enforcing VPA recommendations.]")
     try:
         test_name = "test1"
-        # delete_folder(f"~/muOptK8s/ctrl/logs/{test_name}")
+        delete_folder(f"~/muOptK8s/ctrl/logs/{test_name}")
         command = (f"gcloud container clusters get-credentials cluster-2 --region=northamerica-northeast1-a; "
                    f"python3 ~/muOptK8s/ctrl/autoscaler.py -m {args.method} -wa {args.webapp} -n {test_name} -t {args.wctrl} -ut {args.utarget}")
         enforcer_process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL)
@@ -229,4 +229,4 @@ os.system(locust_command)
 save_time(time_file, "a")
 print("[Experiment completed!]")
 
-# reset_conditions()
+reset_conditions()
