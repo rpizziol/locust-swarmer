@@ -220,6 +220,7 @@ if args.method != "HPA":
         command = (f"gcloud container clusters get-credentials cluster-2 --region=northamerica-northeast1-a; "
                    f"python3 ~/muOptK8s/ctrl/autoscaler.py -m {args.method} -wa {args.webapp} -n {test_name} -t {args.wctrl} -ut {args.utarget}")
         enforcer_process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL)
+        print("Spawned autoscaler process")
     except Exception as e:
         enforcer_process.kill()
         raise
