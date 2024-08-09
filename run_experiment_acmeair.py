@@ -190,7 +190,7 @@ time_file = f"{exp_folder}/{exp_name}-time.txt"
 create_or_clean_folder(exp_folder)  # Create the experiment folder (if it doesn't exist)
 
 reset_conditions()
-time.sleep(60)  # Wait a minute to settle
+time.sleep(30)  # Wait a minute to settle
 
 print(f"[Launching experiment {exp_name} with Locust. Results will be stored in the {exp_folder} folder.]")
 
@@ -212,6 +212,8 @@ if args.method == "VPA":
 
     #Start enforcer (in parallel)
     print("[Starting enforcing VPA recommendations.]")
+
+if args.method != "HPA"
     try:
         test_name = "test1"
         delete_folder(f"~/muOptK8s/ctrl/logs/{test_name}")
