@@ -169,7 +169,7 @@ def create_or_clean_folder(folder_name):
             os.remove(file_path)
 
 
-def run_experiment(exp_name, hostname, webapp, wlshape, method, duration, users)
+def run_experiment(exp_name, hostname, webapp, wlshape, method, duration, users):
     current_date = datetime.datetime.now().strftime("%Y%m%d")
     exp_folder = f"~/results/{webapp}/{current_date}/{exp_name}"
     create_or_clean_folder(exp_folder)  # Create the experiment folder (if it doesn't exist)
@@ -177,7 +177,7 @@ def run_experiment(exp_name, hostname, webapp, wlshape, method, duration, users)
 
     reset_conditions(wait_time=60)
     print(f"[Launching experiment {exp_name} with Locust. Results will be stored in the {exp_folder} folder.]")
-    
+
     save_time(time_file, "w") # Starting time
 
     host_url = f"http://{hostname}:8080"
