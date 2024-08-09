@@ -213,7 +213,7 @@ if args.method == "VPA":
     #Start enforcer (in parallel)
     print("[Starting enforcing VPA recommendations.]")
 
-if args.method != "HPA"
+if args.method != "HPA":
     try:
         test_name = "test1"
         delete_folder(f"~/muOptK8s/ctrl/logs/{test_name}")
