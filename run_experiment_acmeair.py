@@ -230,12 +230,3 @@ save_time(time_file, "a")
 print("[Experiment completed!]")
 
 reset_conditions()
-
-
-def run_experiment():
-
-
-
-if __name__ == '__main__':
-    args = get_cli()
-    run_experiment()
