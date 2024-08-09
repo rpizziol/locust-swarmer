@@ -173,7 +173,7 @@ args = get_cli()
 
 current_date = datetime.datetime.now().strftime("%Y%m%d")
 
-host_url = "http://{args.host}:8080/"
+host_url = f"http://{args.host}:8080/"
 
 if args.wlshape == "traceShape":
     exp_name = args.name  # e.g. sin200-1h-vpa
