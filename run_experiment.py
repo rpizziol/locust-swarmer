@@ -7,7 +7,10 @@ import redis
 from kubernetes import client, config
 from kubernetes.client import ApiException
 import shutil
+import logging
 
+
+results_path = "/home/roberto_pizziol/results"
 
 def delete_folder(path):
     if os.path.exists(path):
@@ -171,7 +174,7 @@ def create_or_clean_folder(folder_name):
 
 def run_experiment(exp_name, hostname, webapp, wlshape, method, duration, users):
     current_date = datetime.datetime.now().strftime("%Y%m%d")
-    exp_folder = f"~/results/{webapp}/{current_date}/{exp_name}"
+    exp_folder = f"{results_path}/{webapp}/{current_date}/{exp_name}"
     create_or_clean_folder(exp_folder)  # Create the experiment folder (if it doesn't exist)
     time_file = f"{exp_folder}/{exp_name}-time.txt"
 
