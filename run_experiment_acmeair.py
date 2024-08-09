@@ -36,7 +36,7 @@ def get_cli():
                         choices=["muOpt", "muOpt-H", "VPA", "HPA"], required=False)
     parser.add_argument("-n", "--name", type=str,
                         help='The experiment name (e.g., sin200-1h-vpa)', required=False)
-    parser.add_argument("-a", "--address", type=str,
+    parser.add_argument("-h", "--host", type=str,
                         help='The ip target of the Locust swarm', required=True)
     parser.add_argument("-ut", "--utarget", type=float, default=0.2,
                         help='The target utilization (only available for µOpt)', required=False)
@@ -170,7 +170,7 @@ args = get_cli()
 
 current_date = datetime.datetime.now().strftime("%Y%m%d")
 
-host_url = args.address  # e.g. "http://34.47.0.52"
+host_url = "http://{args.host}:8080"
 
 if args.wlshape == "traceShape":
     exp_name = args.name  # e.g. sin200-1h-vpa
