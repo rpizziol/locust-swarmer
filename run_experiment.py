@@ -144,9 +144,11 @@ def scale_pod(pod_name, container_name, cpu_request, cpu_limit):
             print(f"Failed to scale pod: {e}")
 
 
-def reset_conditions():
+def reset_conditions(wait_time):
     # Reset Redis value
     reset_redis()
+
+    time.sleep(wait_time)  # Wait a minute to settle
 
     # # Reset replicas and requests
     # for i in range(1, 4):
@@ -167,70 +169,62 @@ def create_or_clean_folder(folder_name):
             os.remove(file_path)
 
 
-# Get CLI input parameters
-args = get_cli()
+def run_experiment(exp_name, hostname, webapp, wlshape, method, duration, users)
+    current_date = datetime.datetime.now().strftime("%Y%m%d")
+    exp_folder = f"~/results/{webapp}/{current_date}/{exp_name}"
+    create_or_clean_folder(exp_folder)  # Create the experiment folder (if it doesn't exist)
+    time_file = f"{exp_folder}/{exp_name}-time.txt"
 
+    reset_conditions(wait_time=60)
+    print(f"[Launching experiment {exp_name} with Locust. Results will be stored in the {exp_folder} folder.]")
+    
+    save_time(time_file, "w") # Starting time
 
-current_date = datetime.datetime.now().strftime("%Y%m%d")
-
-host_url = f"http://{args.host}:8080"
-
-if args.wlshape == "traceShape":
-    exp_name = args.name  # e.g. sin200-1h-vpa
-    exp_folder = f"~/results/acmeair/{current_date}/{exp_name}"
-    locust_command = f"locust -f locustfile.py,traceShape.py --headless --csv=\"{exp_folder}/{exp_name}-learning\" --host=\"{host_url}\""
-else:
-    exp_name = f"u{args.users}-{args.duration}m-{args.method}"
-    exp_folder = f"~/results/acmeair/{current_date}/{exp_name}"
-    locust_command = f"locust -f locustfile.py -r {args.users} -u {args.users} --headless --csv=\"{exp_folder}/{exp_name}\" --host=\"{host_url}\" --run-time {args.duration}m"
-
-# Get current time, filenames and folders
-
-time_file = f"{exp_folder}/{exp_name}-time.txt"
-create_or_clean_folder(exp_folder)  # Create the experiment folder (if it doesn't exist)
-
-reset_conditions()
-time.sleep(30)  # Wait a minute to settle
-
-print(f"[Launching experiment {exp_name} with Locust. Results will be stored in the {exp_folder} folder.]")
-
-# Starting time
-save_time(time_file, "w")
-
-if args.method == "VPA":
-    print("[Beginning of learning phase]")
-    # Learning phase
+    host_url = f"http://{hostname}:8080"
+    if wlshape == "fixed":
+        locust_command = f"locust -f locustfile.py -r {users} -u {users} --headless --csv=\"{exp_folder}/{exp_name}\" --host=\"{host_url}\" --run-time {duration}m"
+    else:
+        locust_command = f"locust -f locustfile.py,traceShape.py --headless --csv=\"{exp_folder}/{exp_name}-learning\" --host=\"{host_url}\""
     os.system(locust_command)
 
-    print("[End of learning phase]")
-    # End learning phase
+    # Ending time
     save_time(time_file, "a")
 
-    # 5 minutes break
-    time.sleep(5 * 60)
-    save_time(time_file, "a")
+    print("[Experiment completed!]")
+    reset_conditions(wait_time=0)
 
-    #Start enforcer (in parallel)
-    print("[Starting enforcing VPA recommendations.]")
+if __name__ == '__main__':
+    args = get_cli()
+    run_experiment(exp_name=args.name, hostname=args.host, webapp=args.webapp, wlshape=args.wlshape, method=args.method, duration=args.duration, users=args.users)
 
-# if args.method != "HPA":
-#     try:
-#         test_name = "test1"
-#         delete_folder(f"~/muOptK8s/ctrl/logs/{test_name}")
-#         command = (f"gcloud container clusters get-credentials cluster-2 --region=northamerica-northeast1-a; "
-#                    f"python3 ~/muOptK8s/ctrl/autoscaler.py -m {args.method} -wa {args.webapp} -n {test_name} -t {args.wctrl} -ut {args.utarget}")
-#         enforcer_process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL)
-#         print("Spawned autoscaler process")
-#     except Exception as e:
-#         enforcer_process.kill()
-#         raise
 
-# # Run the real experiment
-# time.sleep(60)
-os.system(locust_command)
+    # if method == "VPA":
+    #     print("[Beginning of learning phase]")
+    #     # Learning phase
+    #     os.system(locust_command)
 
-# Ending time
-save_time(time_file, "a")
-print("[Experiment completed!]")
+    #     print("[End of learning phase]")
+    #     # End learning phase
+    #     save_time(time_file, "a")
 
-reset_conditions()
+    #     # 5 minutes break
+    #     time.sleep(5 * 60)
+    #     save_time(time_file, "a")
+
+    #     #Start enforcer (in parallel)
+    #     print("[Starting enforcing VPA recommendations.]")
+
+    # # if args.method != "HPA":
+    # #     try:
+    # #         test_name = "test1"
+    # #         delete_folder(f"~/muOptK8s/ctrl/logs/{test_name}")
+    # #         command = (f"gcloud container clusters get-credentials cluster-2 --region=northamerica-northeast1-a; "
+    # #                    f"python3 ~/muOptK8s/ctrl/autoscaler.py -m {args.method} -wa {args.webapp} -n {test_name} -t {args.wctrl} -ut {args.utarget}")
+    # #         enforcer_process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL)
+    # #         print("Spawned autoscaler process")
+    # #     except Exception as e:
+    # #         enforcer_process.kill()
+    # #         raise
+
+    # # # Run the real experiment
+    # # time.sleep(60)
