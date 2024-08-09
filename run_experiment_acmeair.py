@@ -34,9 +34,12 @@ def get_cli():
     parser.add_argument("-m", "--method", type=str,
                         help='The autoscaler.',
                         choices=["muOpt", "muOpt-H", "VPA", "HPA"], required=False)
+    parser.add_argument("-wa", "--webapp", type=str,
+                        help='The benchmark application.',
+                        choices=["Acmeair", "3tier"], required=True)
     parser.add_argument("-n", "--name", type=str,
                         help='The experiment name (e.g., sin200-1h-vpa)', required=False)
-    parser.add_argument("-h", "--host", type=str,
+    parser.add_argument("-ht", "--host", type=str,
                         help='The ip target of the Locust swarm', required=True)
     parser.add_argument("-ut", "--utarget", type=float, default=0.2,
                         help='The target utilization (only available for µOpt)', required=False)
@@ -213,7 +216,7 @@ if args.method == "VPA":
         test_name = "test1"
         # delete_folder(f"~/muOptK8s/ctrl/logs/{test_name}")
         command = (f"gcloud container clusters get-credentials cluster-2 --region=northamerica-northeast1-a; "
-                   f"python3 ~/muOptK8s/ctrl/autoscaler.py -m {args.method} -wa Acmeair -n {test_name} -t {args.wctrl} -ut {args.utarget}")
+                   f"python3 ~/muOptK8s/ctrl/autoscaler.py -m {args.method} -wa {args.webapp} -n {test_name} -t {args.wctrl} -ut {args.utarget}")
         enforcer_process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL)
     except Exception as e:
         enforcer_process.kill()
