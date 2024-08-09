@@ -7,8 +7,6 @@ import redis
 from kubernetes import client, config
 from kubernetes.client import ApiException
 import shutil
-import logging
-
 
 results_path = "/home/roberto_pizziol/results"
 
@@ -39,9 +37,9 @@ def get_cli():
                         choices=["muOpt", "muOpt-H", "VPA", "HPA"], required=False)
     parser.add_argument("-wa", "--webapp", type=str,
                         help='The benchmark application.',
-                        choices=["Acmeair", "3tier"], required=True)
+                        choices=["acmeair", "threetier"], required=True)
     parser.add_argument("-n", "--name", type=str,
-                        help='The experiment name (e.g., sin200-1h-vpa)', required=False)
+                        help='The experiment name (e.g., sin200-1h-vpa)', required=True)
     parser.add_argument("-ht", "--host", type=str,
                         help='The ip target of the Locust swarm', required=True)
     parser.add_argument("-ut", "--utarget", type=float, default=0.2,
@@ -185,9 +183,9 @@ def run_experiment(exp_name, hostname, webapp, wlshape, method, duration, users)
 
     host_url = f"http://{hostname}:8080"
     if wlshape == "fixed":
-        locust_command = f"locust -f locustfile.py -r {users} -u {users} --headless --csv=\"{exp_folder}/{exp_name}\" --host=\"{host_url}\" --run-time {duration}m"
+        locust_command = f"locust -f locustfile_{webapp}.py -r {users} -u {users} --headless --csv=\"{exp_folder}/{exp_name}\" --host=\"{host_url}\" --run-time {duration}m"
     else:
-        locust_command = f"locust -f locustfile.py,traceShape.py --headless --csv=\"{exp_folder}/{exp_name}-learning\" --host=\"{host_url}\""
+        locust_command = f"locust -f locustfile_{webapp}.py,traceShape.py --headless --csv=\"{exp_folder}/{exp_name}-learning\" --host=\"{host_url}\""
     os.system(locust_command)
 
     # Ending time
