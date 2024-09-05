@@ -62,8 +62,8 @@ class MyUser(HttpUser):
                   "userid": userData["_id"],
                   "toFlightId": toFlight["_id"],
                   "toFlightSegId": toFlight["flightSegmentId"],
-                  #"retFlightId": retFlight["_id"],
-                  #"retFlightSegId": retFlight["flightSegmentId"],
+                  "retFlightId": "", #retFlight["_id"],
+                  "retFlightSegId": "", #retFlight["flightSegmentId"],
                   "oneWayFlight": True # False
             }
         r = self.client.post("/bookflights", data=bookingData)
