@@ -68,7 +68,7 @@ class MyUser(HttpUser):
             }
         r = self.client.post("/bookflights", data=bookingData)
         bookingRes = json.loads(r.text)
-        print(bookingRes)
+        #print(bookingRes)
 
         # Booking (CancelBooking)
         bookToCancel = {"userid": userData["_id"], "number": bookingRes["departBookingId"]}
