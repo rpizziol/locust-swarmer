@@ -176,7 +176,7 @@ def run_experiment(exp_name, hostname, webapp, wlshape, method, duration, users)
     create_or_clean_folder(exp_folder)  # Create the experiment folder (if it doesn't exist)
     time_file = f"{exp_folder}/{exp_name}-time.txt"
 
-    reset_conditions(wait_time=60)
+    reset_conditions(wait_time=5)
     print(f"[Launching experiment {exp_name} with Locust. Results will be stored in the {exp_folder} folder.]")
 
     save_time(time_file, "w") # Starting time
