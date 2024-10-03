@@ -181,7 +181,7 @@ def run_experiment(exp_name, hostname, webapp, wlshape, method, duration, users)
 
     save_time(time_file, "w") # Starting time
 
-    host_url = f"http://{hostname}:8080"
+    host_url = f"http://{hostname}:80" # 8080 for Acmeair, 80 for 3-tier
     if wlshape == "fixed":
         locust_command = f"locust -f locustfile_{webapp}.py -r {users} -u {users} --headless --csv=\"{exp_folder}/{exp_name}\" --host=\"{host_url}\" --run-time {duration}m"
     else:
