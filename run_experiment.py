@@ -37,7 +37,7 @@ def get_cli():
                         choices=["muOpt", "muOpt-H", "VPA", "HPA"], required=False)
     parser.add_argument("-wa", "--webapp", type=str,
                         help='The benchmark application.',
-                        choices=["acmeair", "threetier"], required=True)
+                        choices=["acmeair", "3tier"], required=True)
     parser.add_argument("-n", "--name", type=str,
                         help='The experiment name (e.g., sin200-1h-vpa)', required=True)
     parser.add_argument("-ht", "--host", type=str,
