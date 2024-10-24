@@ -15,8 +15,8 @@ class MyUser(HttpUser):
 
     @task
     def index_page(self):
-        think_time = np.random.exponential(1000)  # in ms
-        time.sleep(think_time / 1000)  # in s
+        #think_time = np.random.exponential(1000)  # in ms
+        time.sleep(1) #think_time / 1000)  # in s
         try:
             self.client.get("/")
         except Exception as e:
