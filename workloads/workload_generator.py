@@ -6,6 +6,12 @@ import scipy.io as sio
 
 
 def convert_mat_to_csv(in_path, out_path, index):
+    """convert_mat_to_csv.
+
+    :param in_path:
+    :param out_path:
+    :param index:
+    """
     data = sio.loadmat(in_path)
     data_to_convert = data[index].T
 
@@ -15,6 +21,15 @@ def convert_mat_to_csv(in_path, out_path, index):
 
 
 def generate_sin(filename, min_value, max_value, phase_shift, period, num_entries):
+    """generate_sin.
+
+    :param filename:
+    :param min_value:
+    :param max_value:
+    :param phase_shift:
+    :param period:
+    :param num_entries:
+    """
     amplitude = (max_value - min_value) / 2
     vertical_shift = min_value + amplitude
 
@@ -34,6 +49,15 @@ def generate_sin(filename, min_value, max_value, phase_shift, period, num_entrie
 
 
 def generate_step_function(value1, value2, value3, value4, duration, filename):
+    """generate_step_function.
+
+    :param value1:
+    :param value2:
+    :param value3:
+    :param value4:
+    :param duration:
+    :param filename:
+    """
     data = []
     for i in range(duration):
         if i < duration / 4:
@@ -79,6 +103,10 @@ def set_mid_value(filename, value, start, end):
 
 
 def plot_workload(filename):
+    """plot_workload.
+
+    :param filename:
+    """
     data = pd.read_csv(filename)
     plt.plot(data)
     plt.title(filename)
